@@ -253,6 +253,70 @@
     color:#fff;
   }
 
+  .btn-add-toggle{margin-left:auto;}
+
+  .add-panel{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    padding:16px;
+    margin-bottom:14px;
+    border-radius:var(--radius);
+    border:1px solid var(--border-accent);
+    background:rgba(59,127,232,.06);
+    backdrop-filter:blur(10px);
+  }
+  .add-panel[hidden]{display:none;}
+  .add-panel .field-label{
+    font-size:11px;
+    color:var(--text-muted);
+    margin-bottom:4px;
+    display:block;
+  }
+  .add-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+    gap:12px;
+  }
+  .add-panel input[type="text"],
+  .add-panel select{
+    width:100%;
+    background:var(--panel-solid);
+    border:1px solid var(--border);
+    color:var(--text);
+    font-family:var(--font-body);
+    font-size:14px;
+    padding:9px 12px;
+    border-radius:9px;
+    outline:none;
+  }
+  .add-panel input[type="text"]:focus,
+  .add-panel select:focus{border-color:var(--border-accent);}
+  .add-checks{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 16px;
+  }
+  .add-checks label{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    color:var(--text-muted);
+    cursor:pointer;
+  }
+  .add-checks input{accent-color:var(--accent);}
+  .add-actions{
+    display:flex;
+    gap:10px;
+    align-items:center;
+  }
+  .add-hint{
+    font-size:12px;
+    color:var(--text-faint);
+    margin:0;
+  }
+
   .pool-cards{
     display:flex;
     flex-wrap:wrap;
@@ -268,6 +332,7 @@
 
   /* ---------- card ---------- */
   .card{
+    position:relative;
     touch-action:none;
     user-select:none;
     -webkit-user-select:none;
@@ -323,6 +388,23 @@
     flex:0 0 auto;
   }
   .card.hidden{display:none;}
+  .card-delete{
+    position:absolute;
+    top:-6px;
+    right:-6px;
+    width:18px;height:18px;
+    border-radius:50%;
+    border:1px solid var(--border);
+    background:var(--panel-solid);
+    color:var(--text-muted);
+    font-size:11px;
+    line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    opacity:.55;
+    transition:opacity .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .card-delete:hover{opacity:1;color:#fff;border-color:var(--border-accent);background:var(--accent);}
 
   /* ---------- footer ---------- */
   footer{
@@ -394,7 +476,31 @@
   <div class="filters">
     <input type="text" id="search" placeholder="Rechercher un studio (ex. Fenix, HPG, Carenado...)">
     <div class="chips" id="chips"></div>
+    <button class="btn btn-add-toggle" id="btn-add-toggle">+ Ajouter un studio</button>
   </div>
+
+  <div class="add-panel" id="add-panel" hidden>
+    <div class="add-grid">
+      <div>
+        <span class="field-label">Nom</span>
+        <input type="text" id="add-name" placeholder="ex. Orbx, Digital Aviation...">
+      </div>
+      <div>
+        <span class="field-label">Spécialité (optionnel)</span>
+        <input type="text" id="add-sub" placeholder="ex. Scènerie, hydravions...">
+      </div>
+    </div>
+    <div>
+      <span class="field-label">Tags de filtre (coche au moins un)</span>
+      <div class="add-checks" id="add-tags"></div>
+    </div>
+    <div class="add-actions">
+      <button class="btn primary" id="add-submit">Ajouter à la tier list</button>
+      <button class="btn" id="add-cancel">Annuler</button>
+      <p class="add-hint">Le studio apparaît dans le hangar, prêt à glisser. Nomme ensuite ton logo <code>images/&lt;id-généré&gt;.jpg</code> si tu veux l'illustrer.</p>
+    </div>
+  </div>
+
   <div class="pool-cards drop-zone" id="pool"></div>
 </div>
 
@@ -509,15 +615,16 @@ function makeCard(item){
   el.dataset.id = id;
   el.dataset.devs = tags.join(',');
   el.dataset.name = name.toLowerCase();
-  const tagLabel = tags.map(t=>CAT_LABELS[t]).join(' · ');
-  const fallbackSvg = planeIcon(name, CAT_COLORS[mainCat]);
+  const tagLabel = tags.map(t=>CAT_LABELS[t]||t).join(' · ');
+  const fallbackSvg = planeIcon(name, CAT_COLORS[mainCat] || 'var(--accent)');
   el.innerHTML = `
+    <button type="button" class="card-delete" title="Supprimer">✕</button>
     <span class="icon" data-id="${id}" data-tries="0" data-fallback="${encodeURIComponent(fallbackSvg)}">
       <img src="images/${id}.jpg" alt="${name}" loading="lazy" onerror="handleThumbError(this)">
     </span>
     <span class="meta">
       <span class="name">${name}</span>
-      <span class="dev"><span class="catdot" style="background:${CAT_COLORS[mainCat]}"></span>${sub || tagLabel}</span>
+      <span class="dev"><span class="catdot" style="background:${CAT_COLORS[mainCat]||'var(--accent)'}"></span>${sub || tagLabel}</span>
     </span>`;
   return el;
 }
@@ -560,7 +667,14 @@ function clearDragOver(){
   document.querySelectorAll('.drop-zone.drag-over').forEach(z=>z.classList.remove('drag-over'));
 }
 
+document.addEventListener('click', e=>{
+  const del = e.target.closest('.card-delete');
+  if(!del) return;
+  del.closest('.card').remove();
+});
+
 document.addEventListener('pointerdown', e=>{
+  if(e.target.closest('.card-delete')) return;
   const card = e.target.closest('.card');
   if(!card) return;
   if(e.pointerType === 'mouse' && e.button !== 0) return;
@@ -640,6 +754,64 @@ document.getElementById('btn-export').addEventListener('click', ()=>{
     link.href = canvas.toDataURL('image/png');
     link.click();
   });
+});
+
+/* ---------- ajouter un studio personnalisé ---------- */
+function slugify(str){
+  return str.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'') || 'item';
+}
+
+function uniqueId(base){
+  let id = base, n = 2;
+  while(document.querySelector(`.card[data-id="${id}"]`)){
+    id = `${base}-${n}`; n++;
+  }
+  return id;
+}
+
+const addPanel = document.getElementById('add-panel');
+const addNameInput = document.getElementById('add-name');
+const addTagsWrap = document.getElementById('add-tags');
+
+addTagsWrap.innerHTML = Object.keys(CAT_LABELS).map(k =>
+  `<label><input type="checkbox" name="add-tag" value="${k}">${CAT_LABELS[k]}</label>`
+).join('');
+
+document.getElementById('btn-add-toggle').addEventListener('click', ()=>{
+  addPanel.hidden = !addPanel.hidden;
+  if(!addPanel.hidden) addNameInput.focus();
+});
+
+document.getElementById('add-cancel').addEventListener('click', ()=>{
+  addPanel.hidden = true;
+});
+
+document.getElementById('add-submit').addEventListener('click', ()=>{
+  const name = addNameInput.value.trim();
+  if(!name){ addNameInput.focus(); return; }
+  const sub = document.getElementById('add-sub').value.trim();
+  const checked = [...addTagsWrap.querySelectorAll('input:checked')].map(c=>c.value);
+  const tags = checked.length ? checked : ['ga'];
+  const mainCat = tags[0];
+  const id = uniqueId(slugify(name));
+
+  const card = makeCard([id, name, sub, tags, mainCat]);
+  pool.appendChild(card);
+
+  // on s'assure que le nouvel item est visible même si un filtre était actif
+  activeDev = 'ALL';
+  chipsWrap.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  chipsWrap.querySelector('.chip[data-dev="ALL"]').classList.add('active');
+  document.getElementById('search').value = '';
+  applyFilters();
+
+  addNameInput.value = '';
+  document.getElementById('add-sub').value = '';
+  addTagsWrap.querySelectorAll('input:checked').forEach(c=>c.checked=false);
+  addNameInput.focus();
 });
 
 buildChips();
