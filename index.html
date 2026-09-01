@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Tier List Studios Payware — MSFS 2024 | LLCenLive</title>
+<meta name="description" content="Classe les meilleurs studios payware et freeware de Microsoft Flight Simulator 2024 : Fenix, PMDG, iniBuilds, Just Flight, FSLabs, BlackSquare, FlyByWire et bien d'autres.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%88%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     Police de marque : Evogria.
+     Si tu possèdes le fichier de la police, dépose-le dans /fonts
+     puis décommente le bloc ci-dessous — le site l'utilisera
+     automatiquement (fallback Rajdhani sinon).
+     ------------------------------------------------------------
+     @font-face{
+       font-family:'Evogria';
+       src:url('fonts/Evogria.woff2') format('woff2');
+       font-weight:700; font-display:swap;
+     }
+  ============================================================ */
+
+  :root{
+    --bg:#0a1220;
+    --bg-soft:#0d1826;
+    --panel:rgba(20,32,51,.55);
+    --panel-solid:#121e30;
+    --border:rgba(255,255,255,.08);
+    --border-accent:rgba(59,127,232,.35);
+    --accent:#3b7fe8;
+    --accent-2:#6fb3f0;
+    --accent-glow:rgba(59,127,232,.5);
+    --gold:#e8a83b;
+    --text:#eaf0fb;
+    --text-muted:#8397b8;
+    --text-faint:#4d6082;
+    --font-display:'Evogria','Rajdhani',sans-serif;
+    --font-body:'Roboto',sans-serif;
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(1100px 520px at 12% -8%, rgba(59,127,232,.16), transparent 60%),
+      radial-gradient(900px 460px at 100% 0%, rgba(59,127,232,.10), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    padding:0 0 48px;
+  }
+
+  a{color:var(--accent-2);}
+
+  ::selection{background:var(--accent);color:#fff;}
+
+  /* ---------- header ---------- */
+  header{
+    max-width:1180px;
+    margin:0 auto;
+    padding:44px 24px 28px;
+  }
+  .brandmark{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:.4px;
+    color:var(--accent-2);
+    margin-bottom:14px;
+  }
+  .brandmark .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 12px var(--accent-glow);
+  }
+  h1{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(34px,5.4vw,58px);
+    line-height:1.02;
+    margin:0 0 12px;
+    letter-spacing:.3px;
+  }
+  h1 span{color:var(--accent-2);}
+  header p.lead{
+    max-width:640px;
+    color:var(--text-muted);
+    font-size:15.5px;
+    line-height:1.55;
+    margin:0 0 26px;
+  }
+
+  .toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+  }
+  .btn{
+    appearance:none;
+    border:1px solid var(--border);
+    background:var(--panel);
+    backdrop-filter:blur(10px);
+    color:var(--text);
+    font-family:var(--font-body);
+    font-weight:500;
+    font-size:14px;
+    padding:10px 16px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:border-color .15s ease, transform .1s ease;
+  }
+  .btn:hover{border-color:var(--border-accent);}
+  .btn:active{transform:scale(.97);}
+  .btn.primary{
+    background:linear-gradient(135deg,var(--accent),#2f66c4);
+    border-color:transparent;
+    box-shadow:0 6px 20px -6px var(--accent-glow);
+  }
+  .btn.primary:hover{filter:brightness(1.08);}
+
+  /* ---------- board ---------- */
+  #board{
+    max-width:1180px;
+    margin:8px auto 0;
+    padding:0 24px;
+  }
+  .tier-row{
+    display:flex;
+    align-items:stretch;
+    margin-bottom:10px;
+    border-radius:var(--radius);
+    overflow:hidden;
+    border:1px solid var(--border);
+  }
+  .tier-label{
+    flex:0 0 84px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    padding:10px 6px;
+    text-align:center;
+  }
+  .tier-label .letter{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:30px;
+    line-height:1;
+  }
+  .tier-label .caption{
+    font-size:10px;
+    color:rgba(234,240,251,.75);
+    letter-spacing:.2px;
+  }
+  .tier-cards{
+    flex:1;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:12px;
+    min-height:76px;
+    align-content:flex-start;
+    background:var(--panel-solid);
+  }
+  .tier-cards.drag-over{background:rgba(59,127,232,.12);}
+
+  .tier-row[data-tier="S"] .tier-label{background:rgba(59,127,232,.42);box-shadow:inset 0 0 30px var(--accent-glow);}
+  .tier-row[data-tier="S"] .tier-cards{background:rgba(59,127,232,.14);}
+  .tier-row[data-tier="A"] .tier-label{background:rgba(59,127,232,.30);}
+  .tier-row[data-tier="A"] .tier-cards{background:rgba(59,127,232,.09);}
+  .tier-row[data-tier="B"] .tier-label{background:rgba(59,127,232,.20);}
+  .tier-row[data-tier="B"] .tier-cards{background:rgba(59,127,232,.055);}
+  .tier-row[data-tier="C"] .tier-label{background:rgba(59,127,232,.13);}
+  .tier-row[data-tier="C"] .tier-cards{background:rgba(59,127,232,.03);}
+  .tier-row[data-tier="D"] .tier-label{background:rgba(59,127,232,.08);}
+  .tier-row[data-tier="D"] .tier-cards{background:rgba(59,127,232,.015);}
+
+  .tier-row[data-tier="NT"]{margin-top:22px;border-style:dashed;border-color:rgba(255,255,255,.14);}
+  .tier-row[data-tier="NT"] .tier-label{background:rgba(255,255,255,.04);}
+  .tier-row[data-tier="NT"] .tier-label .letter{color:var(--text-muted);font-size:22px;}
+  .tier-row[data-tier="NT"] .tier-cards{background:rgba(255,255,255,.02);}
+
+  /* ---------- hangar / pool ---------- */
+  #hangar{
+    max-width:1180px;
+    margin:40px auto 0;
+    padding:0 24px;
+  }
+  #hangar h2{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:22px;
+    margin:0 0 4px;
+  }
+  #hangar .sub{
+    color:var(--text-muted);
+    font-size:13.5px;
+    margin:0 0 18px;
+  }
+  .filters{
+    display:flex;
+    flex-wrap:wrap;
+    gap:16px;
+    align-items:center;
+    margin-bottom:16px;
+  }
+  #search{
+    flex:1 1 220px;
+    background:var(--panel-solid);
+    border:1px solid var(--border);
+    color:var(--text);
+    font-family:var(--font-body);
+    font-size:14px;
+    padding:10px 14px;
+    border-radius:10px;
+    outline:none;
+  }
+  #search:focus{border-color:var(--border-accent);}
+  .chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .chip{
+    border:1px solid var(--border);
+    background:transparent;
+    color:var(--text-muted);
+    font-family:var(--font-body);
+    font-size:12.5px;
+    font-weight:500;
+    padding:7px 13px;
+    border-radius:999px;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:all .15s ease;
+  }
+  .chip:hover{border-color:var(--border-accent);color:var(--text);}
+  .chip.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+  }
+
+  .pool-cards{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:16px;
+    border-radius:var(--radius);
+    border:1px solid var(--border);
+    background:var(--panel);
+    backdrop-filter:blur(10px);
+    min-height:100px;
+  }
+  .pool-cards.drag-over{border-color:var(--border-accent);}
+
+  /* ---------- card ---------- */
+  .card{
+    touch-action:none;
+    user-select:none;
+    -webkit-user-select:none;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    background:var(--panel-solid);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:8px 12px 8px 9px;
+    cursor:grab;
+    min-width:150px;
+  }
+  .card:active{cursor:grabbing;}
+  .card.dragging{
+    box-shadow:0 18px 40px -10px rgba(0,0,0,.55), 0 0 0 1px var(--border-accent);
+    opacity:.96;
+  }
+  .card .icon{
+    flex:0 0 46px;
+    width:46px;height:46px;
+    border-radius:9px;
+    overflow:hidden;
+    background:rgba(255,255,255,.07);
+    display:flex;align-items:center;justify-content:center;
+    padding:4px;
+  }
+  .card .icon img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+  }
+  .card .icon svg{width:100%;height:100%;}
+  .card .meta{min-width:0;}
+  .card .name{
+    font-size:13.5px;
+    font-weight:700;
+    line-height:1.15;
+    white-space:nowrap;
+  }
+  .card .dev{
+    font-size:10.5px;
+    color:var(--text-muted);
+    white-space:nowrap;
+    display:flex;
+    align-items:center;
+    gap:5px;
+    margin-top:2px;
+  }
+  .card .dev .catdot{
+    width:6px;height:6px;border-radius:50%;
+    flex:0 0 auto;
+  }
+  .card.hidden{display:none;}
+
+  /* ---------- footer ---------- */
+  footer{
+    max-width:1180px;
+    margin:52px auto 0;
+    padding:20px 24px 0;
+    border-top:1px solid var(--border);
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 18px;
+    align-items:center;
+    justify-content:space-between;
+    color:var(--text-faint);
+    font-size:12.5px;
+  }
+  footer a{color:var(--text-muted);text-decoration:none;font-weight:500;}
+  footer a:hover{color:var(--accent-2);}
+
+  @media (max-width:640px){
+    .tier-label{flex-basis:56px;}
+    .tier-label .letter{font-size:22px;}
+    .tier-label .caption{display:none;}
+    .card{min-width:132px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brandmark"><span class="dot"></span> LLCENLIVE · MSFS 2024</div>
+  <h1>Tier List <span>Studios</span></h1>
+  <p class="lead">Glisse-dépose les studios payware et freeware dans les tiers S à D pour construire ton classement. Vingt éditeurs, tous segments confondus — liners, régional, GA, hélico, warbirds. Le classement se fait en direct, sur ton écran — rien n'est envoyé nulle part.</p>
+  <div class="toolbar">
+    <button class="btn primary" id="btn-export">Exporter en image</button>
+    <button class="btn" id="btn-reset">Réinitialiser</button>
+  </div>
+</header>
+
+<div id="board">
+  <div class="tier-row" data-tier="S">
+    <div class="tier-label"><span class="letter">S</span><span class="caption">Références</span></div>
+    <div class="tier-cards drop-zone" data-tier="S"></div>
+  </div>
+  <div class="tier-row" data-tier="A">
+    <div class="tier-label"><span class="letter">A</span><span class="caption">Excellents</span></div>
+    <div class="tier-cards drop-zone" data-tier="A"></div>
+  </div>
+  <div class="tier-row" data-tier="B">
+    <div class="tier-label"><span class="letter">B</span><span class="caption">Solides</span></div>
+    <div class="tier-cards drop-zone" data-tier="B"></div>
+  </div>
+  <div class="tier-row" data-tier="C">
+    <div class="tier-label"><span class="letter">C</span><span class="caption">Corrects</span></div>
+    <div class="tier-cards drop-zone" data-tier="C"></div>
+  </div>
+  <div class="tier-row" data-tier="D">
+    <div class="tier-label"><span class="letter">D</span><span class="caption">À éviter</span></div>
+    <div class="tier-cards drop-zone" data-tier="D"></div>
+  </div>
+  <div class="tier-row" data-tier="NT">
+    <div class="tier-label"><span class="letter">?</span><span class="caption">Pas testé</span></div>
+    <div class="tier-cards drop-zone" data-tier="NT"></div>
+  </div>
+</div>
+
+<div id="hangar">
+  <h2>Hangar</h2>
+  <p class="sub">Tous les studios non classés. Filtre par spécialité ou cherche un nom, puis fais-le glisser dans un tier.</p>
+  <div class="filters">
+    <input type="text" id="search" placeholder="Rechercher un studio (ex. Fenix, HPG, Carenado...)">
+    <div class="chips" id="chips"></div>
+  </div>
+  <div class="pool-cards drop-zone" id="pool"></div>
+</div>
+
+<footer>
+  <span>© 2026 Lucas — <a href="https://twitch.tv/llcenlive" target="_blank" rel="noopener">twitch.tv/llcenlive</a></span>
+  <span>Tier List Studios MSFS 2024 · fait pour la communauté LLCenLive</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+/* ==========================================================
+   Données — recensement des liners payware MSFS 2024
+   (à jour à la construction de l'outil ; MAJ facile ci-dessous)
+========================================================== */
+const CAT_LABELS = {
+  airliner: 'Long/moyen-courrier',
+  regional: 'Régional',
+  ga:       'Aviation générale',
+  heli:     'Hélicoptère',
+  classic:  'Warbird / Classique',
+  freeware: 'Freeware'
+};
+const CAT_COLORS = {
+  airliner: 'var(--accent)',
+  regional: 'var(--accent-2)',
+  ga:       '#8aa2c4',
+  heli:     '#6fd6b0',
+  classic:  'var(--gold)',
+  freeware: '#c48bf0'
+};
+
+// id, nom, spécialité courte, [tags de filtre], tag principal (couleur du badge)
+const STUDIOS = [
+  ['ini','iniBuilds','Long, moyen-courrier & classiques',['airliner'],'airliner'],
+  ['fenix','Fenix Simulations','Famille A320 CEO',['airliner'],'airliner'],
+  ['pmdg','PMDG','737NG & 777',['airliner'],'airliner'],
+  ['justflight','Just Flight','GA (PA-28) & régional (Fokker)',['ga','regional'],'ga'],
+  ['fslabs','Flight Sim Labs','A321 ceo/neo',['airliner'],'airliner'],
+  ['blacksquare','BlackSquare','GA haut de gamme (Duke, TBM, Baron)',['ga'],'ga'],
+  ['fbw','FlyByWire Simulations','A32NX & A380X freeware',['airliner','freeware'],'freeware'],
+  ['aerosoft','Aerosoft','CRJ, Twin Otter, A340-600 Pro',['regional','airliner'],'regional'],
+  ['toliss','ToLiss','A340-600 Pro (avec Aerosoft)',['airliner'],'airliner'],
+  ['tfdi','TFDi Design','MD-11',['airliner'],'airliner'],
+  ['fss','Flight Sim Studio','727 & E-Jets',['regional','classic'],'regional'],
+  ['virtualcol','VirtualCol','CRJ, Dash 8, E-Jets',['regional'],'regional'],
+  ['latinvfr','Latin VFR','A320 family, A330, A380',['airliner'],'airliner'],
+  ['hpg','Hype Performance Group','H145, H160, H225',['heli'],'heli'],
+  ['carenado','Carenado','Aviation générale multi-sim',['ga'],'ga'],
+  ['dcdesigns','DC Designs','Concorde, warbirds, jets classiques',['classic'],'classic'],
+  ['flyingiron','FlyingIron Simulations','Warbirds WWII',['classic'],'classic'],
+  ['milviz','Milviz','GA complexe & warbirds',['ga','classic'],'ga'],
+  ['sws','SimWorks Studios','Hélicoptères & brousse',['heli'],'heli'],
+  ['rotorsim','RotorSim','Hélicoptères',['heli'],'heli'],
+];
+
+/* ---------- badge de secours : monogramme généré à partir du nom du studio,
+   utilisé tant qu'aucun logo n'a été déposé dans images/ ---------- */
+function initials(name){
+  const words = name.replace(/[()]/g,'').split(/\s+/).filter(Boolean);
+  let letters = words.map(w => w[0]).join('').toUpperCase();
+  if(letters.length > 3) letters = letters.slice(0,3);
+  if(letters.length < 2 && words[0]) letters = words[0].slice(0,2).toUpperCase();
+  return letters;
+}
+
+function monogramBadge(name, color){
+  const label = initials(name);
+  const fontSize = label.length >= 3 ? 19 : 24;
+  return `<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1" y="1" width="58" height="58" rx="12" fill="none" stroke="${color}" stroke-width="2" opacity=".55"/>
+    <text x="30" y="31" text-anchor="middle" dominant-baseline="central"
+      font-family="Rajdhani, sans-serif" font-weight="700" font-size="${fontSize}" fill="${color}">${label}</text>
+  </svg>`;
+}
+
+function planeIcon(name, color){
+  return `<span style="display:flex;">${monogramBadge(name, color)}</span>`;
+}
+
+/* ---------- rendu ---------- */
+const pool = document.getElementById('pool');
+const chipsWrap = document.getElementById('chips');
+let activeDev = 'ALL';
+
+function buildChips(){
+  const all = document.createElement('button');
+  all.className = 'chip active';
+  all.textContent = 'Tous';
+  all.dataset.dev = 'ALL';
+  chipsWrap.appendChild(all);
+  Object.keys(CAT_LABELS).forEach(code=>{
+    const c = document.createElement('button');
+    c.className = 'chip';
+    c.textContent = CAT_LABELS[code];
+    c.dataset.dev = code;
+    chipsWrap.appendChild(c);
+  });
+  chipsWrap.addEventListener('click', e=>{
+    const chip = e.target.closest('.chip');
+    if(!chip) return;
+    chipsWrap.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    activeDev = chip.dataset.dev;
+    applyFilters();
+  });
+}
+
+function makeCard(item){
+  const [id,name,sub,tags,mainCat] = item;
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.dataset.id = id;
+  el.dataset.devs = tags.join(',');
+  el.dataset.name = name.toLowerCase();
+  const tagLabel = tags.map(t=>CAT_LABELS[t]).join(' · ');
+  const fallbackSvg = planeIcon(name, CAT_COLORS[mainCat]);
+  el.innerHTML = `
+    <span class="icon" data-id="${id}" data-tries="0" data-fallback="${encodeURIComponent(fallbackSvg)}">
+      <img src="images/${id}.jpg" alt="${name}" loading="lazy" onerror="handleThumbError(this)">
+    </span>
+    <span class="meta">
+      <span class="name">${name}</span>
+      <span class="dev"><span class="catdot" style="background:${CAT_COLORS[mainCat]}"></span>${sub || tagLabel}</span>
+    </span>`;
+  return el;
+}
+
+/* Cascade d'extensions pour tes propres logos (images/{id}.ext).
+   Si aucun n'existe, on retombe sur le badge monogramme —
+   rien ne casse si tu n'as pas encore ajouté un logo. */
+const IMG_EXTS = ['jpg','jpeg','png','webp'];
+function handleThumbError(imgEl){
+  const wrap = imgEl.parentElement;
+  const tries = parseInt(wrap.dataset.tries, 10) + 1;
+  wrap.dataset.tries = tries;
+  if(tries < IMG_EXTS.length){
+    imgEl.src = `images/${wrap.dataset.id}.${IMG_EXTS[tries]}`;
+  } else {
+    wrap.innerHTML = decodeURIComponent(wrap.dataset.fallback);
+  }
+}
+
+function renderPool(){
+  STUDIOS.forEach(item=>pool.appendChild(makeCard(item)));
+}
+
+function applyFilters(){
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  pool.querySelectorAll('.card').forEach(card=>{
+    const devs = card.dataset.devs.split(',');
+    const matchDev = activeDev === 'ALL' || devs.includes(activeDev);
+    const matchSearch = !q || card.dataset.name.includes(q);
+    card.classList.toggle('hidden', !(matchDev && matchSearch));
+  });
+}
+
+document.getElementById('search').addEventListener('input', applyFilters);
+
+/* ---------- drag & drop (Pointer Events, souris + tactile) ---------- */
+let dragEl=null, dragging=false, offsetX=0, offsetY=0, startX=0, startY=0, originalRect=null;
+
+function clearDragOver(){
+  document.querySelectorAll('.drop-zone.drag-over').forEach(z=>z.classList.remove('drag-over'));
+}
+
+document.addEventListener('pointerdown', e=>{
+  const card = e.target.closest('.card');
+  if(!card) return;
+  if(e.pointerType === 'mouse' && e.button !== 0) return;
+  dragEl = card;
+  dragging = false;
+  originalRect = card.getBoundingClientRect();
+  offsetX = e.clientX - originalRect.left;
+  offsetY = e.clientY - originalRect.top;
+  startX = e.clientX; startY = e.clientY;
+  card.setPointerCapture(e.pointerId);
+});
+
+document.addEventListener('pointermove', e=>{
+  if(!dragEl) return;
+  const dx = e.clientX - startX, dy = e.clientY - startY;
+  if(!dragging && Math.hypot(dx,dy) > 6){
+    dragging = true;
+    dragEl.classList.add('dragging');
+    dragEl.style.width = originalRect.width + 'px';
+    document.body.appendChild(dragEl);
+    dragEl.style.position = 'fixed';
+    dragEl.style.zIndex = 1000;
+    dragEl.style.pointerEvents = 'none';
+  }
+  if(dragging){
+    dragEl.style.left = (e.clientX - offsetX) + 'px';
+    dragEl.style.top = (e.clientY - offsetY) + 'px';
+    const under = document.elementFromPoint(e.clientX, e.clientY);
+    clearDragOver();
+    const target = under && under.closest('.drop-zone');
+    if(target) target.classList.add('drag-over');
+  }
+});
+
+function endDrag(e){
+  if(!dragEl) return;
+  if(dragging){
+    const under = document.elementFromPoint(e.clientX, e.clientY);
+    const target = under && under.closest('.drop-zone');
+    clearDragOver();
+    dragEl.style.position = '';
+    dragEl.style.left = '';
+    dragEl.style.top = '';
+    dragEl.style.width = '';
+    dragEl.style.zIndex = '';
+    dragEl.style.pointerEvents = '';
+    dragEl.classList.remove('dragging');
+    (target || pool).appendChild(dragEl);
+    applyFilters();
+  }
+  dragEl = null;
+  dragging = false;
+}
+document.addEventListener('pointerup', endDrag);
+document.addEventListener('pointercancel', endDrag);
+
+/* ---------- réinitialiser ---------- */
+document.getElementById('btn-reset').addEventListener('click', ()=>{
+  document.querySelectorAll('.tier-cards .card').forEach(c=>pool.appendChild(c));
+  document.getElementById('search').value = '';
+  activeDev = 'ALL';
+  chipsWrap.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  chipsWrap.querySelector('.chip[data-dev="ALL"]').classList.add('active');
+  applyFilters();
+});
+
+/* ---------- export image ---------- */
+document.getElementById('btn-export').addEventListener('click', ()=>{
+  if(typeof html2canvas === 'undefined'){
+    alert("L'export a besoin d'une connexion internet (chargement de html2canvas). Réessaie une fois en ligne.");
+    return;
+  }
+  const board = document.querySelector('header').closest('body'); // capture large
+  html2canvas(document.body, {backgroundColor:'#0a1220', scale:2, useCORS:true}).then(canvas=>{
+    const link = document.createElement('a');
+    link.download = 'tierlist-studios-msfs2024-llcenlive.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+});
+
+buildChips();
+renderPool();
+</script>
+</body>
+</html>
